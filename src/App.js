@@ -1,22 +1,24 @@
-import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import MyNav from './components/MyNav'
-import Home from './components/Home'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Reservations from './components/Reservations'
-import Menu from './components/Menu'
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import MyNav from "./components/MyNav";
+import Home from "./components/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Reservations from "./components/Reservations";
+import Menu from "./components/Menu";
 
 function App() {
   return (
     <div>
-      <Router>
+      <BrowserRouter>
         <MyNav title="Strivestaurant" />
-        <Route exact path="/" render={(routerProps) => <Home {...routerProps} title="Strivestaurant" />} />
-        <Route path="/reservations" component={Reservations} />
-        <Route path="/menu" component={Menu} />
-      </Router>
+        <Routes>
+          <Route path="/" element={<Home title="Strivestaurant" />} />
+          <Route path="/reservations" element={<Reservations />} />
+          <Route path="/menu" element={<Menu />} />
+        </Routes>
+      </BrowserRouter>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
