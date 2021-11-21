@@ -1,90 +1,94 @@
-import { useEffect, useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { useState } from 'react'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 const ReservationForm = () => {
   const [reservation, setReservation] = useState({
-    name: "",
-    phone: "",
-    numberOfPersons: 1,
+    name: '',
+    phone: '',
+    numberOfPeople: 1,
     smoking: false,
-    dateTime: "",
-    specialRequests: "",
-  });
+    dateTime: '',
+    specialRequests: '',
+  })
 
-  const inputChange = (e) => {
-    let id = e.target.id;
-
+  const handleInput = (fieldName, value) => {
     setReservation({
       ...reservation,
-      [id]: id === "smoking" ? e.target.checked : e.target.value,
-    });
-  };
+      [fieldName]: value,
+    })
+  }
 
-  useEffect(() => {}, [reservation]);
-
-  const submitReservation = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log(reservation)
     try {
       let response = await fetch(
-        "https://striveschool-api.herokuapp.com/api/reservation",
+        'https://striveschool-api.herokuapp.com/api/reservation',
         {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(reservation),
           headers: {
-            "Content-type": "application/json",
+            'Content-type': 'application/json',
           },
         }
-      );
+      )
+
       if (response.ok) {
-        alert("Reservation saved!");
+        alert('OK!')
         setReservation({
-          name: "",
-          phone: "",
-          numberOfPersons: 1,
+          name: '',
+          phone: '',
+          numberOfPeople: 1,
           smoking: false,
-          dateTime: "",
-          specialRequests: "",
-        });
+          dateTime: '',
+          specialRequests: '',
+        })
       } else {
-        alert("Houston we had a problem, try again!");
+        alert('ERROR')
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   return (
     <>
-      <h3 className="mt-3">RESERVATION FORM</h3>
-      <Form className="mb-5" onSubmit={(e) => submitReservation(e)}>
+      <h2>Book your table NOW!</h2>
+      <Form onSubmit={handleSubmit}>
         <Form.Group>
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Your name</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Enter name"
+            type='text'
+            placeholder='Input your name'
             value={reservation.name}
-            id="name"
-            onChange={(e) => inputChange(e)}
+            onChange={(e) => {
+              handleInput('name', e.target.value)
+            }}
+            required
           />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Phone</Form.Label>
+          <Form.Label>Your phone</Form.Label>
           <Form.Control
-            type="number"
-            placeholder="Enter phone"
-            id="phone"
+            type='tel'
+            placeholder='Input your cellphone'
             value={reservation.phone}
-            onChange={(e) => inputChange(e)}
+            onChange={(e) => {
+              handleInput('phone', e.target.value)
+            }}
+            required
           />
         </Form.Group>
         <Form.Group>
           <Form.Label>How many people?</Form.Label>
           <Form.Control
-            as="select"
-            value={reservation.numberOfPersons}
-            id="numberOfPersons"
-            onChange={(e) => inputChange(e)}
+            as='select'
+            value={reservation.numberOfPeople}
+            onChange={(e) => {
+              handleInput('numberOfPeople', e.target.value)
+            }}
+            required
           >
             <option>1</option>
             <option>2</option>
@@ -96,38 +100,42 @@ const ReservationForm = () => {
         </Form.Group>
         <Form.Group>
           <Form.Check
-            type="checkbox"
-            label="Do you smoke?"
+            type='checkbox'
+            label='Do you smoke?'
             checked={reservation.smoking}
-            id="smoking"
-            onChange={(e) => inputChange(e)}
+            onChange={(e) => {
+              handleInput('smoking', e.target.checked)
+            }}
           />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Date</Form.Label>
+          <Form.Label>Date?</Form.Label>
           <Form.Control
-            type="datetime-local"
+            type='datetime-local'
             value={reservation.dateTime}
-            id="dateTime"
-            onChange={(e) => inputChange(e)}
+            onChange={(e) => {
+              handleInput('dateTime', e.target.value)
+            }}
+            required
           />
         </Form.Group>
         <Form.Group>
           <Form.Label>Any special request?</Form.Label>
           <Form.Control
-            as="textarea"
-            rows={3}
+            as='textarea'
+            rows={5}
             value={reservation.specialRequests}
-            id="specialRequests"
-            onChange={inputChange}
+            onChange={(e) => {
+              handleInput('specialRequests', e.target.value)
+            }}
           />
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button variant='primary' type='submit'>
           Submit
         </Button>
       </Form>
     </>
-  );
-};
+  )
+}
 
-export default ReservationForm;
+export default ReservationForm

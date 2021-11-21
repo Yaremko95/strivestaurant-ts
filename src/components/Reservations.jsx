@@ -1,65 +1,56 @@
-import { useEffect, useState } from "react";
-import { Container, Col, Row, ListGroup } from "react-bootstrap";
-import Loading from "./Loading";
-import Error from "./Error";
-import ReservationForm from "./ReservationForm";
-import { parseISO, format } from "date-fns";
+import { useState, useEffect } from 'react'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Spinner from 'react-bootstrap/Spinner'
+import Alert from 'react-bootstrap/Alert'
+import { parseISO, format } from 'date-fns'
 
 const Reservations = () => {
-  const [reservations, setReservations] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [reservations, setReservations] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        let response = await fetch(
-          "https://striveschool-api.herokuapp.com/api/reservation"
-        );
-        let newReservations = await response.json();
-        setReservations(newReservations);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false);
-        setIsError(true);
-      }
-    };
-    getData();
-  }, []);
-  return (
-    <Container>
-      <Row className="justify-content-center mt-3">
-        <Col xs={12} md={6}>
-          <h3>RESERVATIONS:</h3>
-          {isLoading && <Loading />}
-          {isError && <Error />}
-          {reservations.length === 0 &&
-          isLoading === false &&
-          isError === false ? (
-            <p>NO RESERVATIONS</p>
-          ) : (
-            <ListGroup>
-              {reservations.map((reservation) => (
-                <ListGroup.Item key={reservation._id}>
-                  {reservation.name} for {reservation.numberOfPeople} on{" "}
-                  {format(
-                    parseISO(reservation.dateTime),
-                    "EEEE, MMM. do - HH:mm"
-                  )}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          )}
-        </Col>
-      </Row>
-      <Row className="justify-content-center mt-3">
-        <Col xs={12} md={6}>
-          <ReservationForm />
-        </Col>
-      </Row>
-    </Container>
-  );
-};
+    fetchReservations()
+  }, [])
 
-export default Reservations;
+  const fetchReservations = async () => {
+    try {
+      let response = await fetch(
+        'https://striveschool-api.herokuapp.com/api/reservation'
+      )
+
+      if (response.ok) {
+        let data = await response.json()
+        setReservations(data)
+        setIsLoading(false)
+      } else {
+        setIsLoading(false)
+        setIsError(true)
+      }
+    } catch (error) {
+      setIsLoading(false)
+      setIsError(true)
+    }
+  }
+
+  return (
+    <>
+      <h2 className='mt-4'>BOOKED TABLES</h2>
+      {isLoading && <Spinner animation='border' variant='info' />}
+      {isError ? (
+        <Alert variant='danger'>Something went wrong :(</Alert>
+      ) : (
+        <ListGroup className='mb-5'>
+          {reservations.map((res) => (
+            <ListGroup.Item key={res._id}>
+              {res.name} for {res.numberOfPeople} on{' '}
+              {format(parseISO(res.dateTime), 'EEEE, MMM. do - HH:mm')}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
+    </>
+  )
+}
+
+export default Reservations

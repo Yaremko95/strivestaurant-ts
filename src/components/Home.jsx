@@ -1,36 +1,39 @@
-import { Carousel, Col, Container, Row } from 'react-bootstrap'
-import dishes from '../data/menu.json'
 import { useState } from 'react'
+import { Carousel, Container, Col, Row } from 'react-bootstrap'
+import items from '../data/menu.json'
 import DishComments from './DishComments'
-import upperName from '../helpers/lib'
 
-const Home = ({ title }) => {
-  const [selected, setSelected] = useState(null)
+const Home = () => {
+  const [selectedDish, setSelectedDish] = useState(undefined)
 
   return (
     <Container>
-      <Row className="justify-content-center mt-3">
-        <Col xs={12} md={6}>
-          <h1>Welcome to {upperName(title)}!</h1>
-          <h3 className="text-center mb-4">We can only cook pasta...</h3>
-          <Carousel>
-            {dishes.map((dish, i) => (
-              <Carousel.Item
-                key={dish.id}
-                onClick={() => {
-                  setSelected(dish)
-                }}
-              >
-                <img className="d-block w-100" src={dish.image} alt={'slide number ' + (i + 1)} />
+      <Row className='mt-3 justify-content-center'>
+        <Col xs={12} md={6} className='text-center'>
+          <h1>Welcome to Strivestaurant!</h1>
+          <p>We can serve only pasta</p>
+          <Carousel className='mt-5'>
+            {items.map((pastaObject) => (
+              <Carousel.Item key={pastaObject.id}>
+                <img
+                  className='d-block w-100'
+                  src={pastaObject.image}
+                  alt='First slide'
+                  onClick={() => setSelectedDish(pastaObject)}
+                />
                 <Carousel.Caption>
-                  <h3>{dish.name}</h3>
-                  <p>{dish.description}</p>
+                  <h3>{pastaObject.name}</h3>
+                  <p>{pastaObject.description}</p>
                 </Carousel.Caption>
               </Carousel.Item>
             ))}
           </Carousel>
         </Col>
-        <DishComments selectedPasta={selected} />
+      </Row>
+      <Row className='mt-3 justify-content-center'>
+        <Col xs={12} md={6} className='text-center'>
+          <DishComments selectedDish={selectedDish} />
+        </Col>
       </Row>
     </Container>
   )
