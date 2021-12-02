@@ -1,6 +1,11 @@
-import ListGroup from 'react-bootstrap/ListGroup'
+import ListGroup from "react-bootstrap/ListGroup";
+import { Item } from "../types/item";
 
-const DishComments = (props) => (
+interface IProps {
+  selectedDish: Item | undefined;
+}
+
+const DishComments = (props: IProps) => (
   <ListGroup>
     {props.selectedDish ? (
       props.selectedDish.comments.map((c) => (
@@ -10,6 +15,6 @@ const DishComments = (props) => (
       <ListGroup.Item>Click on a pasta to see the reviews!</ListGroup.Item>
     )}
   </ListGroup>
-)
+);
 
-export default DishComments
+export default DishComments;

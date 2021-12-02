@@ -1,30 +1,27 @@
-import { Navbar, Nav } from "react-bootstrap";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 import { Link, useLocation } from "react-router-dom";
 
-const MyNav = (props) => {
+interface IProps {
+  brand: string;
+}
+
+const MyNavbar = (props: IProps) => {
   const location = useLocation();
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Link to="/">
-        <Navbar.Brand>{props.title}</Navbar.Brand>
+        <Navbar.Brand>{props.brand}</Navbar.Brand>
       </Link>
+
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="ml-auto">
-          <Link to="/">
-            <div
-              className={
-                location.pathname === "/" ? "nav-link active" : "nav-link"
-              }
-            >
-              Home
-            </div>
-          </Link>
           <Link to="/menu">
             <div
               className={
-                location.pathname === "/menu" ? "nav-link active" : "nav-link"
+                "nav-link" + (location.pathname === "/menu" ? " active" : "")
               }
             >
               Menu
@@ -33,12 +30,20 @@ const MyNav = (props) => {
           <Link to="/reservations">
             <div
               className={
-                location.pathname === "/reservations"
-                  ? "nav-link active"
-                  : "nav-link"
+                "nav-link" +
+                (location.pathname === "/reservations" ? " active" : "")
               }
             >
               Reservation
+            </div>
+          </Link>
+          <Link to="/contact">
+            <div
+              className={
+                "nav-link" + (location.pathname === "/contact" ? " active" : "")
+              }
+            >
+              Contact
             </div>
           </Link>
         </Nav>
@@ -47,4 +52,4 @@ const MyNav = (props) => {
   );
 };
 
-export default MyNav;
+export default MyNavbar;
